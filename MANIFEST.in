@@ -1,0 +1,2 @@
+recursive-include secure_file/secure *
+recursive-include secure_file/ *

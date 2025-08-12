@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "secure_file"
+version = "0.0.1"
+description = "A framework for encoding and decoding text using custom mappings."
+authors = [{ name = "Soundhearddev" }]
+license = { file = "LICENSE" }
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = ["pycryptodome"]  
+
+[tool.setuptools]
+packages = ["secure_file"]
+include-package-data = true 
