@@ -15,7 +15,7 @@
 ## Table of Contents
 
 - [Overview](#overview)
-- [How it works(#How it works)
+- [How-it-works](#How-it-works)
 
 ---
 
@@ -23,6 +23,6 @@
 
 Secure File Framework is a modified version of [Seucure Python Framework](https://github.com/soundhearddev/Secure-Python-Framework) and uses the sam encrypting as it. The key differnce is here, that you can encode and decode ANY type of file.
 
-## How it works
+## How-it-works
 
 
