@@ -7,7 +7,6 @@
 ![repo-top-language](https://img.shields.io/github/languages/top/soundhearddev/Secure_File_Framework?style=flat&color=0080ff) 
 ![repo-language-count](https://img.shields.io/github/languages/count/soundhearddev/Secure_File_Framework?style=flat&color=0080ff)
 
-*Built with the tools and technologies:*
 
 ![Python](https://img.shields.io/badge/Python-3776AB.svg?style=flat&logo=Python&logoColor=white)
 
