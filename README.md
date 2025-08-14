@@ -1,7 +1,7 @@
 
-# SECURE_FILE_FRAMEWORK
+# SECURE FILE FRAMEWORK
 
-*Secure Your Data, Empower Your Future*
+
 
 ![last-commit](https://img.shields.io/github/last-commit/soundhearddev/Secure_File_Framework?style=flat&logo=git&logoColor=white&color=0080ff) 
 ![repo-top-language](https://img.shields.io/github/languages/top/soundhearddev/Secure_File_Framework?style=flat&color=0080ff) 
