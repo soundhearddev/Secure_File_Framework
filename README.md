@@ -9,7 +9,6 @@
 
 *Built with the tools and technologies:*
 
-![TOML](https://img.shields.io/badge/TOML-9C4121.svg?style=flat&logo=TOML&logoColor=white) 
 ![Python](https://img.shields.io/badge/Python-3776AB.svg?style=flat&logo=Python&logoColor=white)
 
 ---
