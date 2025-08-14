@@ -20,6 +20,6 @@
 
 ## Overview
 
-Secure File Framework is a developer tool that provides a reliable foundation for implementing secure file encoding and decoding functionalities in Python applications. Built with a focus on cryptographic robustness, it leverages the pycryptodome library to ensure data confidentiality and integrity.
+Secure File Framework is a modified version of [Seucure Python Framework](https://github.com/soundhearddev/Secure-Python-Framework)
 
 
