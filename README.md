@@ -25,4 +25,5 @@ Secure File Framework is a modified version of [Seucure Python Framework](https:
 
 ## How-it-works
 
+To encrypt every file type it firstly encrypts it's contents to base64. After that it will encrypt it with the same system as Secure Python Framework
 
