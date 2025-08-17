@@ -25,13 +25,6 @@ def base64_to_file(base64_str, OUTPUT_FILEPATH):
 def Suffix(path):
     return Path(path).suffix
 
-def debug(password):
-    global DEBUG
-    if password == "1234":
-        print("Debug Mode activated")
-        DEBUG = not DEBUG
-        return DEBUG
-
 DEBUG = True
 p = "passwort"
 
@@ -85,8 +78,8 @@ def DECODE_TEXT(text, mapping):
 def ENCODE_FILE(file, mapping, path):
     suffix = Suffix(file)
     base64_str = file_to_base64(file)  # 1. Datei zu Base64
-    
-    ENCODED_PATH = ENCODE_TEXT(path, mapping)
+    full_path = os.path.abspath(file)
+    ENCODED_PATH = ENCODE_TEXT(full_path, mapping)
     
     ENCODED_BODY = ENCODE_TEXT(base64_str, mapping)  # 2. Base64-Text codieren
     OUTPUT_STRING = f"⡇{suffix}⡆{ENCODED_PATH}⡇{ENCODED_BODY}"
@@ -105,14 +98,24 @@ def OPEN_ENCODED_FILE(file):
     with open(file, "r", encoding="utf-8") as f:
         return f.read()
 
+
+
 def ENCODE_MAIN_DELETE(filename: str):
     path = filename
+    full_path = os.path.abspath(filename)
     suffix = Suffix(filename)
     MAPPING = CREATE_RANDOM_MAPPING()
     SAVE_MAPPING(MAPPING, filename)
 
     json_path = secure_path() + "data\\" + filename.removesuffix(suffix) + ".json"
     enc_path = json_path.removesuffix(".json") + ".enc"
+
+    if DEBUG:
+        print(f"path:  {path}")
+        print(f"full_path:  {full_path}")
+        print(f"json_path:  {json_path}")
+        print(f"enc_path:  {enc_path}")
+
 
     with open(json_path, "rb") as f:
         json_data = f.read()
@@ -124,10 +127,15 @@ def ENCODE_MAIN_DELETE(filename: str):
 
     with open(enc_path, "wb") as f:
         f.write(salt + cipher.nonce + tag + ciphertext)
+    
+    
 
+        
     os.remove(json_path)
-    ENCODE_FILE(filename, MAPPING, path)
-    os.remove(filename)
+    ENCODE_FILE(full_path, MAPPING, path)
+    #os.remove(full_path)
+
+
 
 
 def ENCODE_FOLDER_RECURSIVE(root_folder: str, remove = False):
@@ -139,8 +147,9 @@ def ENCODE_FOLDER_RECURSIVE(root_folder: str, remove = False):
                 ENCODE_MAIN_DELETE(full_path)
             except Exception as e:
                 print(f"Fehler beim Verschlüsseln von {full_path}: {e}")
-    if remove == True:
-        shutil.rmtree(root_folder)
+    if remove:
+        #shutil.rmtree(root_folder)
+        print("removed folder")
 
 
 
