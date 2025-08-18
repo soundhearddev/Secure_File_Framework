@@ -41,6 +41,13 @@ def secure_path():
         base = os.getcwd()
     return os.path.join(base, "Lib", "site-packages", "secure_file", "secure") + os.sep
 
+
+def data_path():
+    file_path = secure_path() + "data\\"
+    return file_path
+
+
+
 def alphabet_2_charset(secure): return ''.join([encryption_chars[alphabet.index(c)] if c in alphabet else '[UNKOWN]' for c in secure])
 def charset_2_alphabet(secure): return ''.join([alphabet[encryption_chars.index(c)] if c in encryption_chars else '[UNKOWN]' for c in secure])
 
@@ -153,25 +160,56 @@ def ENCODE_FOLDER_RECURSIVE(root_folder: str, remove = False):
 
 
 
-
+def FIND_FILE(folder_path: str, search_name: str):
+    for root, dirs, files in os.walk(folder_path):
+        for file in files:
+            name, ext = os.path.splitext(file)  
+            file = Path(file)
+            if name.lower() == search_name.lower() and file.suffix == ".scff":
+                return os.path.join(root, file)  
+    return None  
 
 
 
 def DECODE_MAIN_SAFE(filepath_or_name: str, cleanup=False, namespace=globals()):
     import os
-
+    
     if os.path.isfile(filepath_or_name) and filepath_or_name.endswith(".scff"):
+        
         code_path = filepath_or_name
         filename = os.path.splitext(os.path.basename(filepath_or_name))[0]
+        if DEBUG:
+            print("Method 1 used")
+            print(f"filename {filename}")
+            print(f"code_path {code_path}")
+            print(f"filepath_or_name {filepath_or_name}")
+    
+    
     else:
         # Fallback: relativ zu secure_path()/data/
         code_path = os.path.join(secure_path(), "data", filepath_or_name + ".scff")
-        filename = filepath_or_name
+        filename = filepath_or_name    
+        if DEBUG:
+            print("Method 2 used")
+            print(f"filename {filename}")
+            print(f"code_path {code_path}")
+            print(f"filepath_or_name {filepath_or_name}")
+        DATAPATH = data_path()
+    try:
+        CHECK_FILE_EXISTENSE(code_path)
+    except FileNotFoundError:
+        print("file not found in root folder")
+        result = FIND_FILE(DATAPATH, filename)
+        if result:
+            print("File found here:", result)
+            code_path = result
+            with open(code_path, "r", encoding="utf-8") as file:
+                coded_text = file.read()
 
-    with open(code_path, "r", encoding="utf-8") as file:
-        coded_text = file.read()
 
     try:
+        if DEBUG:
+            print("starting header decoding..")
         first_marker = coded_text.index("⡇")
         second_marker = coded_text.index("⡇", first_marker + 1)
 
@@ -181,9 +219,13 @@ def DECODE_MAIN_SAFE(filepath_or_name: str, cleanup=False, namespace=globals()):
         header_parts = [seg.strip() for seg in header_and_sections.split("⡆")]
         header = header_parts[0]
         path_sections = header_parts[1:] if len(header_parts) > 1 else []
-
+        if DEBUG:
+            print("finished header decoding")
     except ValueError:
         raise ValueError("Header konnte nicht gelesen werden.")
+
+
+
 
     enc_path = os.path.join(os.path.dirname(code_path), filename + ".enc")
 
@@ -237,6 +279,8 @@ def DECODE_MAIN_SAFE(filepath_or_name: str, cleanup=False, namespace=globals()):
         os.remove(enc_path)
         os.remove(code_path)
         print("Cleanup erfolgreich.")
+
+
 
 
 def DECODE_FOLDER_RECURSIVE(root_folder: str, cleanup=False, namespace=globals()):
