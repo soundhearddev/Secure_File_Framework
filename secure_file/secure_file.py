@@ -1,4 +1,7 @@
-#Secure File Encryption v2.1
+#Secure File Encryption v2.3 
+# future update:
+#   - UTF-16
+#   - Performance
 
 import json
 import random
@@ -36,7 +39,7 @@ class Config:
     # File markers
     marker_start: str = "⡇"
     marker_separator: str = "⡆"
-    marker_password: str = "⡈"  # v.2.1 passwort header marker
+    marker_password: str = "⡈" 
     
     def __post_init__(self):
         if self.alphabet is None:
@@ -333,11 +336,14 @@ class FileEncoder:
         encoded_path = self.mapper.encode_text(str(filepath.absolute()), mapping)
         encoded_body = self.mapper.encode_text(base64_str, mapping)
         
-        # Handle optional password
-        # probier villeicht 12352135
+        
+        
+        
+        #optionales passwort 
+        #damit 
         suffix = filepath.suffix
         if user_password:
-            # Hash the password and encode it
+            # Hash
             pwd_hash, _ = self.pwd_manager.hash_password(user_password)
             encoded_password = self.mapper.encode_text(pwd_hash, mapping)
             
@@ -634,12 +640,7 @@ class SecureFileManager:
     ) -> None:
         """
         Recursively encrypt all files in folder.
-        
-        Args:
-            folder_path: Path to folder
-            password: Optional password for all files
-            delete_originals: Whether to delete original files
-            prompt_password: Whether to prompt for password once for all files
+        NOT MAINTAINED
         """
         folder = Path(folder_path)
         
@@ -648,12 +649,12 @@ class SecureFileManager:
         # Get password once if prompting
         if prompt_password and not password:
             password = self.pwd_manager.prompt_password(
-                "Enter password for all files (leave empty for none): "
+                "Enter password): "
             )
             if password.strip() == "":
                 password = None
             elif password:
-                confirm = self.pwd_manager.prompt_password("Confirm password: ")
+                confirm = self.pwd_manager.prompt_password("Confirm: ")
                 if password != confirm:
                     print("Passwords don't match!")
                     return
@@ -725,10 +726,10 @@ def main():
     #manager.decrypt_file("test.txt", cleanup=False)
     
     # Mit Passwort (direkt angeben)
-    #manager.encrypt_file("secret.txt", password="123", delete_original=False)
-    #manager.decrypt_file("secret.txt", password="123", cleanup=False)
+    #manager.encrypt_file("test.txt", password="123", delete_original=False)
+    #manager.decrypt_file("test.txt", password="123", cleanup=False)
     
     # Mit Passwort (im terminal eingeben)
-    #manager.encrypt_file("secret.txt", prompt_password=True, delete_original=False)
-    #manager.decrypt_file("secret.txt", prompt_password=True, cleanup=False)
+    #manager.encrypt_file("test.txt", prompt_password=True, delete_original=False)
+    #manager.decrypt_file("test.txt", prompt_password=True, cleanup=False)
 main()
