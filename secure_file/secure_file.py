@@ -1,7 +1,4 @@
-"""
-Secure File Encryption System v2.1
-A file encryption utility using AES-GCM and custom character mapping with optional password protection.
-"""
+#Secure File Encryption v2.1
 
 import json
 import random
@@ -337,6 +334,7 @@ class FileEncoder:
         encoded_body = self.mapper.encode_text(base64_str, mapping)
         
         # Handle optional password
+        # probier villeicht 12352135
         suffix = filepath.suffix
         if user_password:
             # Hash the password and encode it
@@ -352,7 +350,7 @@ class FileEncoder:
             )
             
             if self.config.debug:
-                print(f"🔐 Password protection enabled")
+                print(f"Password protection enabled")
         else:
             # Format: ⡇.ext⡆path⡇body (no password)
             output_content = (
@@ -398,7 +396,7 @@ class FileDecoder:
         # Check password if present
         if header_info['has_password']:
             if not user_password:
-                raise PermissionError("❌ This file is password protected. Password required!")
+                raise PermissionError("This file is password protected. Password required!")
             
             # Decode stored password hash
             reverse_mapping = {v: k for k, v in mapping.items()}
@@ -409,7 +407,7 @@ class FileDecoder:
             
             # Verify password
             if not self.pwd_manager.verify_password(user_password, decoded_hash):
-                raise PermissionError("❌ Incorrect password!")
+                raise PermissionError("Incorrect password!")
             
             if self.config.debug:
                 print(f"✓ Password verified")
@@ -536,7 +534,7 @@ class SecureFileManager:
         path = Path(filepath).absolute()
         FileHandler.check_exists(path)
         
-        print(f"🔒 Encrypting: {path.name}")
+        print(f"Encrypting: {path.name}")
         
         # Get password if prompting
         if prompt_password and not password:
@@ -547,7 +545,7 @@ class SecureFileManager:
                 # Confirm password
                 confirm = self.pwd_manager.prompt_password("Confirm password: ")
                 if password != confirm:
-                    print("❌ Passwords don't match!")
+                    print("Passwords don't match!")
                     return
         
         # Create and save mapping
@@ -587,7 +585,7 @@ class SecureFileManager:
         
         FileHandler.check_exists(encoded_path)
         
-        print(f"🔓 Decrypting: {encoded_path.name}")
+        print(f"Decrypting: {encoded_path.name}")
         
         # Load mapping
         mapping = self.mapping_storage.load(filename)
@@ -605,7 +603,7 @@ class SecureFileManager:
                     if prompt_password:
                         attempt += 1
                         if attempt >= max_attempts:
-                            print(f"❌ Maximum password attempts reached!")
+                            print(f"Maximum password attempts reached!")
                             raise
                         password = self.pwd_manager.prompt_password(
                             f"Enter password ({max_attempts - attempt} attempts left): "
@@ -624,6 +622,9 @@ class SecureFileManager:
         
         return output_path
     
+    
+    
+    # WARNING!!! NO LONGER MAINTAINED
     def encrypt_folder(
         self, 
         folder_path: str, 
@@ -642,7 +643,7 @@ class SecureFileManager:
         """
         folder = Path(folder_path)
         
-        print(f"📁 Encrypting folder: {folder}")
+        print(f"Encrypting folder: {folder}")
         
         # Get password once if prompting
         if prompt_password and not password:
@@ -654,7 +655,7 @@ class SecureFileManager:
             elif password:
                 confirm = self.pwd_manager.prompt_password("Confirm password: ")
                 if password != confirm:
-                    print("❌ Passwords don't match!")
+                    print("Passwords don't match!")
                     return
         
         file_count = 0
@@ -664,7 +665,7 @@ class SecureFileManager:
                     self.encrypt_file(str(file_path), password, delete_originals, prompt_password=False)
                     file_count += 1
                 except Exception as e:
-                    print(f"❌ Error: {file_path.name} - {e}")
+                    print(f"Error: {file_path.name} - {e}")
         
         print(f"✓ Encrypted {file_count} files")
     
@@ -686,7 +687,7 @@ class SecureFileManager:
         """
         folder = Path(folder_path) if folder_path else PathManager.get_data_path()
         
-        print(f"📁 Decrypting folder: {folder}")
+        print(f"Decrypting folder: {folder}")
         
         file_count = 0
         for file_path in folder.rglob(f'*{self.config.file_extension}'):
@@ -720,13 +721,14 @@ def main():
     # ========== EINZELNE DATEI ==========
     
     # Ohne Passwort
-    # manager.encrypt_file("document.txt", delete_original=False)
-    # manager.decrypt_file("document.txt", cleanup=False)
+    #manager.encrypt_file("test.txt", delete_original=False)
+    #manager.decrypt_file("test.txt", cleanup=False)
     
     # Mit Passwort (direkt angeben)
     #manager.encrypt_file("secret.txt", password="123", delete_original=False)
-    #manager.decrypt_file("secret.txt", password="1523", cleanup=False)
+    #manager.decrypt_file("secret.txt", password="123", cleanup=False)
     
     # Mit Passwort (im terminal eingeben)
     #manager.encrypt_file("secret.txt", prompt_password=True, delete_original=False)
     #manager.decrypt_file("secret.txt", prompt_password=True, cleanup=False)
+main()
